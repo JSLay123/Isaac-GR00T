@@ -426,7 +426,9 @@ class LeRobotSingleDataset(Dataset):
         """
         all_steps: list[tuple[int, int]] = []
         for trajectory_id, trajectory_length in zip(self.trajectory_ids, self.trajectory_lengths):
-            for base_index in range(trajectory_length):
+            # randaomly sample a start offset for each trajectory, removing 0-30 frames of each episode
+            start_offset = min(np.random.randint(0, 31), max(0, trajectory_length - 1))
+            for base_index in range(start_offset, trajectory_length):
                 all_steps.append((trajectory_id, base_index))
         return all_steps
 
